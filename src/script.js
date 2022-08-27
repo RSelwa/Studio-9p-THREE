@@ -62,6 +62,7 @@ const createPlane = (texture) => {
   );
   const planeMaterial = new THREE.MeshBasicMaterial();
   planeMaterial.side = THREE.DoubleSide;
+  planeMaterial.transparent = true;
   planeMaterial.map = texture;
 
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -497,7 +498,7 @@ const tick = () => {
     const modulo = 4;
     const radius = 0.4;
     const speed = 2;
-    plane.vis;
+    //position
     plane.position.x =
       Math.cos(planesAngles[index]) * (delay % modulo) * radius +
       Math.cos(elapsedTime * 0.5) * 0.5;
@@ -505,8 +506,29 @@ const tick = () => {
       Math.sin(planesAngles[index]) * (delay % modulo) * radius +
       Math.sin(elapsedTime * 0.5) * 0.5;
     plane.position.z = ((delay * speed) % modulo) - modulo;
+
+    //Scale
     const scale = Math.sqrt((plane.position.z + 4) / 4);
     plane.scale.set(scale, scale, scale);
+
+    //opacity
+    const z = plane.position.z;
+    const upExp = 0.4;
+    const downExp = 1;
+    const up = Math.sqrt(Math.pow(z + 4, upExp) / Math.pow(4, upExp));
+    const down = Math.sqrt(Math.pow(-z, downExp));
+
+    if (plane.position.z > -0.852) {
+      plane.material.opacity = down;
+    } else {
+      plane.material.opacity = up;
+    }
+    if (index < 1) {
+      console.log("z ", z);
+      console.log("opacity ", plane.material.opacity);
+      console.log("up ", up);
+      console.log("down  ", down);
+    }
   });
 
   //textGroup
