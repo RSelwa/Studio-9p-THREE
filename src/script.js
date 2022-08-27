@@ -47,6 +47,7 @@ const textureLoader = new THREE.TextureLoader();
 // Planes
 let planesAngles = [];
 let planesTextures = [];
+
 const createPlane = (texture) => {
   planesTextures.push(texture);
   planesAngles.push(Math.random() * Math.PI * 2);
@@ -424,6 +425,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  */
 const clock = new THREE.Clock();
 let i = 0;
+const upExp = 0.4;
+const downExp = 1;
+
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
@@ -513,8 +517,6 @@ const tick = () => {
 
     //opacity
     const z = plane.position.z;
-    const upExp = 0.4;
-    const downExp = 1;
     const up = Math.sqrt(Math.pow(z + 4, upExp) / Math.pow(4, upExp));
     const down = Math.sqrt(Math.pow(-z, downExp));
 
@@ -522,12 +524,6 @@ const tick = () => {
       plane.material.opacity = down;
     } else {
       plane.material.opacity = up;
-    }
-    if (index < 1) {
-      console.log("z ", z);
-      console.log("opacity ", plane.material.opacity);
-      console.log("up ", up);
-      console.log("down  ", down);
     }
   });
 
